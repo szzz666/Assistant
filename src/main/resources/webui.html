@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>协管插件</title>
+    <link href="https://cdn.staticfile.net/twitter-bootstrap/5.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.staticfile.net/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.staticfile.net/vue/2.2.2/vue.min.js"></script>
+    <script src="https://cdn.staticfile.net/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<style>
+    .masking {
+        margin: auto;
+        position: fixed;
+        left: 0px;
+        right: 0;
+        top: 0px;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 4;
+        backdrop-filter: blur(5px);
+        transition: backdrop-filter 1s ease;
+        display: none;
+    }
+
+    .window {
+        margin: auto;
+        position: absolute;
+        left: 0px;
+        right: 0;
+        top: 0px;
+        bottom: 0px;
+        background-color: rgba(255, 255, 255, 1);
+        width: 300px;
+        height: 260px;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        transition: all 1s ease;
+        z-index: 4;
+        text-align: center;
+    }
+
+    .title {
+        margin: 10px;
+        font-size: 30px;
+    }
+
+    .tips {
+        margin: 5px;
+        font-size: 17px;
+        color: red;
+    }
+
+    .input {
+        margin: 5px;
+        width: 250px;
+        height: 40px;
+        border-radius: 5px;
+        border: 0px;
+        background-color: #b9caff;
+    }
+
+    /* 选择器定位到输入框的placeholder文本 */
+    .input::-webkit-input-placeholder {
+        font-size: 20px;
+        /* 设置你想要的颜色，例如红色 */
+    }
+
+    .login {
+        margin-top: 10px;
+        margin-left: 20px;
+        margin-right: 20px;
+        font-size: 20px;
+        background-color: #4F7cff;
+        border-radius: 5px;
+        height: 40px;
+        padding: 5px;
+        box-sizing: border-box;
+        transition: all 1s ease;
+    }
+
+    .login:hover {
+        margin-left: 10px;
+        margin-right: 10px;
+        background-color: #275cfa;
+        transition: all 1s ease;
+    }
+
+    body {
+        /* 加载背景图 */
+        background-image: url(https://www.loliapi.com/acg/);
+        /* 背景图垂直、水平均居中 */
+        background-position: center center;
+        /* 背景图不平铺 */
+        background-repeat: no-repeat;
+        /* 当内容高度大于图片高度时，背景图像的位置相对于viewport固定 */
+        background-attachment: fixed;
+        /* 让背景图基于容器大小伸缩 */
+        background-size: 100% auto;
+        /* 设置背景颜色，背景图加载过程中会显示背景色 */
+        width: 100%;
+        height: 100vh;
+        position: fixed;
+        overflow-y: auto;
+        -webkit-user-select: none;
+        /* Safari */
+        -moz-user-select: none;
+        /* Firefox */
+        -ms-user-select: none;
+        /* Internet Explorer */
+        user-select: none;
+    }
+
+    #main {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 300px;
+        height: 450px;
+        margin: auto;
+        /* 这句对于固定定位元素居中无效，可以移除 */
+        display: flex;
+        /* 使用Flex布局 */
+        justify-content: center;
+        /* 水平居中 */
+        align-items: center;
+        /* 垂直居中 */
+        border-radius: 10px;
+        box-shadow: 3px 3px 9px #888888;
+        background-color: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+
+    .form-select {
+        width: 150px;
+    }
+
+    .form-control {
+        width: 250px;
+    }
+    button{
+        margin: 10px;
+    }
+</style>
+
+<body>
+<div class="masking">
+    <div class="window">
+        <div class="title">身份认证</div>
+        <div class="tips">请去服务器设置协管密码</div>
+        <input type="text" placeholder="请输入你的游戏名" id="usr" class="input">
+        <input type="password" placeholder="请输入你设置的密码" id="pwd" class="input">
+        <div class="login" @click="setusrandpwd">登录</div>
+    </div>
+</div>
+<div id="main">
+    <div id="playerList">
+        <form>
+            <label for="sel1" class="form-label">选择被处理的玩家：</label>
+            <select class="form-select" id="sel1" name="palyeName" v-model="palyerName">
+                <option v-for="(player, index) in playerList" :key="index" :value="player">{{ player }}</option>
+            </select>
+            <br>
+            <label for="sel1" class="form-label">选择处理方式：</label>
+            <select class="form-select" id="sel2" name="processing" v-model="processing">
+                <option value="0">警告</option>
+                <option value="1">杀死</option>
+                <option value="2">踢出</option>
+                <option value="3">封禁</option>
+                <option value="4">封禁IP</option>
+            </select>
+            <br>
+            <label type="text" class="form-label">处理玩家发送的消息提示：</label>
+            <input type="text" class="form-control" id="parameter" name="parameter" v-model="parameter">
+            <br>
+            <button type="button" class="btn btn-primary" id="submitmag" @click="submitForm">提交</button>
+            <button type="button" class="btn btn-success" @click="getplayerList">刷新玩家列表</button>
+            <br>
+            <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+                    data-bs-target="#UnbanModal">解封</button>
+            <button type="button" class="btn btn btn-dark" data-bs-toggle="modal"
+                    data-bs-target="#banModal">封禁离线玩家</button>
+        </form>
+    </div>
+</div>
+<!-- 模态框 -->
+<div class="modal fade" id="UnbanModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- 模态框内容 -->
+            <div class="modal-body">
+                <label type="text" class="form-label">被解封玩家名：</label>
+                <input type="text" class="form-control" v-model="palyerName">
+            </div>
+
+            <!-- 模态框底部 -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" @click="Unban" data-bs-dismiss="modal">提交</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- 模态框 -->
+<div class="modal fade" id="banModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- 模态框内容 -->
+            <div class="modal-body">
+                <label type="text" class="form-label">被封禁玩家名：</label>
+                <input type="text" class="form-control" v-model="palyerName">
+                <br>
+                <label type="text" class="form-label">玩家被拦截进服看到的提示：</label>
+                <input type="text" class="form-control" v-model="parameter">
+            </div>
+
+            <!-- 模态框底部 -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" @click="ban" data-bs-dismiss="modal">提交</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    if (!localStorage.getItem("username") && !localStorage.getItem("password")) {
+        $(".masking").fadeIn();
+    }
+    $(".login").click(function () {
+        localStorage.setItem("username", $("#usr").val());
+        localStorage.setItem("password", $("#pwd").val());
+        location.reload();
+    });
+    var url = window.location.href
+    var getplayerListUrl = url + "?getPlayerNameList";
+function codeTips(returnValue){
+    if (returnValue == "200") { // 与数字进行比较
+        alert("提交成功");
+    } else if (returnValue == "401"){
+        alert("提交失败，填写不全"); // 添加错误提示
+    }
+    else if (returnValue == "402") {
+        alert("提交失败，你没有协管权限"); // 添加错误提示
+        $(".masking").fadeIn(); // 显示遮罩层
+    }else if (returnValue == "403") {
+        alert("提交失败，密码错误"); // 添加错误提示
+        $(".masking").fadeIn(); // 显示遮罩层
+    }else {
+        alert("提交失败，未知错误");
+    }
+}
+    new Vue({
+        el: '#main',
+        data: {
+            playerList: [],
+            palyerName: '',
+            processing: '',
+            parameter: ''
+        },
+        mounted() {
+            this.getplayerList();// 首次加载先执行一次
+        },
+        methods: {
+            getplayerList() {
+                axios.get(getplayerListUrl)
+                    .then(result => {
+                        this.playerList = result.data;
+                    })
+                    .catch(error => {
+                        console.error("获取玩家列表失败:", error); // 记录错误信息
+                    });
+            },
+            submitForm() {
+                axios.post(url, {
+                    PlayerName: this.palyerName, // 修正拼写错误
+                    Processing: this.processing,
+                    Parameter: this.parameter,
+                    Username: localStorage.getItem("username"),
+                    Password: localStorage.getItem("password")
+                })
+                    .then(result => {
+                        const returnValue = result.data.code; // 获取HTTP状态码
+                        codeTips(returnValue);
+                    })
+                    .catch(error => {
+                        alert("提交失败:无法连接到服务器");
+                        console.error("提交失败:无法连接到服务器", error); // 记录错误信息
+                    });
+            },
+            Unban() {
+                axios.post(url, {
+                    PlayerName: this.palyerName, // 修正拼写错误
+                    Processing: "unban",
+                    Parameter: "unban",
+                    Username: localStorage.getItem("username"),
+                    Password: localStorage.getItem("password")
+                })
+                    .then(result => {
+                        const returnValue = result.data.code; // 获取HTTP状态码
+                        codeTips(returnValue);
+                    })
+                    .catch(error => {
+                        alert("提交失败:无法连接到服务器");
+                        console.error("提交失败:无法连接到服务器", error); // 记录错误信息
+                    });
+            }
+        }
+    });
+
+    new Vue({
+        el: '#UnbanModal',
+        data: {
+            palyerName: ''
+        },
+        mounted() {
+        },
+        methods: {
+            Unban() {
+                axios.post(url, {
+                    PlayerName: this.palyerName, // 修正拼写错误
+                    Processing: "unban",
+                    Parameter: "unban",
+                    Username: localStorage.getItem("username"),
+                    Password: localStorage.getItem("password")
+                })
+                    .then(result => {
+                        const returnValue = result.data.code; // 获取HTTP状态码
+                        codeTips(returnValue);
+                    })
+                    .catch(error => {
+                        alert("提交失败:无法连接到服务器");
+                        console.error("提交失败:无法连接到服务器", error); // 记录错误信息
+                    });
+            }
+        }
+    });
+    new Vue({
+        el: '#banModal',
+        data: {
+            palyerName: '',
+            parameter: ''
+        },
+        mounted() {
+        },
+        methods: {
+            ban() {
+                axios.post(url, {
+                    PlayerName: this.palyerName, // 修正拼写错误
+                    Processing: "ban",
+                    Parameter: this.parameter,
+                    Username: localStorage.getItem("username"),
+                    Password: localStorage.getItem("password")
+                })
+                    .then(result => {
+                        const returnValue = result.data.code; // 获取HTTP状态码
+                        codeTips(returnValue);
+                    })
+                    .catch(error => {
+                        alert("提交失败:无法连接到服务器");
+                        console.error("提交失败:无法连接到服务器", error); // 记录错误信息
+                    });
+            }
+        }
+    });
+</script>
+
+</html>

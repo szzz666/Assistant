@@ -1,0 +1,12 @@
+Assistant:
+  #协管游戏名 : webui登陆密码
+  MCSzzz666: null
+#命令配置
+Command:
+  CommandName: xg
+  openAssistantForm: open
+  openUnbanForm: unban
+  addAssistant: add
+  delAssistant: del
+# WebUI端口号配置，为 -1 时不启用WebUI
+WebUiPort: 28668
