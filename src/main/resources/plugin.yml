@@ -1,6 +1,6 @@
 name: Assistant
 main: top.szzz666.Assistant.AssistantMain
-version: "1.0.1"
+version: "1.0.2"
 author: szzz666
 api: ["1.0.0"]
 description: Assistant plugin
