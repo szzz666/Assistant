@@ -10,6 +10,7 @@ import top.szzz666.Assistant.web.MyHttpServer;
 
 import static top.szzz666.Assistant.config.AssistantConfig.WebUiPort;
 import static top.szzz666.Assistant.config.AssistantConfig.loadConfig;
+import static top.szzz666.Assistant.config.LangConfig.loadLangConfig;
 
 
 public class AssistantMain extends PluginBase {
@@ -38,6 +39,7 @@ public class AssistantMain extends PluginBase {
         this.saveResource("config.yml");
         this.saveResource("webui.html");
         loadConfig();
+        loadLangConfig();
         if (WebUiPort > 0){
             new Thread(MyHttpServer::httpServer).start();
         }

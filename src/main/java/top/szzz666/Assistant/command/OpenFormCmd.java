@@ -7,11 +7,12 @@ import cn.nukkit.command.CommandSender;
 import java.util.Objects;
 
 import static top.szzz666.Assistant.config.AssistantConfig.*;
+import static top.szzz666.Assistant.config.LangConfig.*;
 import static top.szzz666.Assistant.form.AssistantForm.*;
 
 public class OpenFormCmd extends Command {
     public OpenFormCmd() {
-        super("xg", "打开协管菜单", "/xg [参数]");
+        super(CommandConfig.get("CommandName"), OpFormCmd_description);
     }
 
     @Override
@@ -21,34 +22,34 @@ public class OpenFormCmd extends Command {
             if (args.length == 0) {
                 generalForm((Player) sender);
                 return true;
-            } else if (Objects.equals(args[0], "open")) {
+            } else if (Objects.equals(args[0], CommandConfig.get("openAssistantForm"))) {
                 openAssistantForm((Player) sender);
                 return true;
-            } else if (Objects.equals(args[0], "unban")) {
+            } else if (Objects.equals(args[0], CommandConfig.get("openUnbanForm"))) {
                 UnbanForm((Player) sender);
                 return true;
-            } else if (Objects.equals(args[0], "add")) {
+            } else if (Objects.equals(args[0], CommandConfig.get("addAssistant"))) {
                 if (sender.isOp()) {
                     if (addAssistant(args[1])) {
-                        sender.sendMessage("§b添加协管成功");
+                        sender.sendMessage(OpenFormCmd_addAssistant_sendMessage);
                     } else {
-                        sender.sendMessage("§c添加协管失败，该玩家已经是协管");
+                        sender.sendMessage(OpenFormCmd_addAssistant_sendMessage_error);
                     }
                     return true;
                 }
 
-            } else if (Objects.equals(args[0], "del")) {
+            } else if (Objects.equals(args[0], CommandConfig.get("delAssistant"))) {
                 if (sender.isOp()) {
                     if (delAssistant(args[1])) {
-                        sender.sendMessage("§b删除协管成功");
+                        sender.sendMessage(OpenFormCmd_delAssistant_sendMessage);
                     } else {
-                        sender.sendMessage("§c删除协管失败");
+                        sender.sendMessage(OpenFormCmd_delAssistant_sendMessage_error);
                     }
                     return true;
                 }
             }
         }else {
-            sender.sendMessage("§c你没有权限执行该命令");
+            sender.sendMessage(OpenFormCmd_not);
         }
         return false;
     }

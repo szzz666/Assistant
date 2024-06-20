@@ -1,0 +1,43 @@
+OpFormCmd_description: "打开协管菜单"
+OpenFormCmd_addAssistant_sendMessage: "§b添加协管成功"
+OpenFormCmd_addAssistant_sendMessage_error: "§c添加协管失败"
+OpenFormCmd_delAssistant_sendMessage: "§b删除协管成功"
+OpenFormCmd_delAssistant_sendMessage_error: "§c删除协管失败"
+OpenFormCmd_not: "§c你没有权限执行该命令"
+generalForm_title: "§e协管菜单"
+generalForm_content: "§b选择你要的功能"
+generalForm_ElementButton1: "§b处理玩家"
+generalForm_ElementButton2: "§b解封玩家"
+generalForm_ElementButton3: "§b封禁离线玩家"
+generalForm_ElementButton4: "§b设置WebUI登录密码"
+banForm_title: "§e封禁离线玩家"
+banForm_ElementInput1: "§b被封禁玩家名："
+banForm_ElementInput2: "§b玩家被拦截进服看到的提示："
+SetWebUIpwdForm_title: "设置WebUI登录密码"
+SetWebUIpwdForm_ElementInput1: "输入要设置的密码"
+SetWebUIpwdForm_ElementInput2: "再一次输入要设置的密码"
+generalForm_sendMessage: "成功设置密码为："
+generalForm_sendMessage_error: "§c两次密码输入不一致"
+openAssistantForm_title: "§e处理玩家菜单"
+openAssistantForm_ElementDropdown1: "§b选择被处理的玩家："
+openAssistantForm_ElementDropdown2: "§b选择处理方式："
+openAssistantForm_ElementInput1: "§b处理玩家发送的消息提示："
+openAssistantForm_Arrays:
+  - "警告"
+  - "杀死"
+  - "踢出"
+  - "封禁"
+  - "封禁IP"
+openAssistantForm_sendMessage: "§c你不能封禁你自己"
+UnbanForm_title: "§e解封玩家"
+UnbanForm_ElementInput: "§b被解封玩家名:"
+warnPlayer_title: "§c警告"
+warnPlayer_sendMessage: "§c收到警告: "
+tipsMessage: "§c协管 "
+tipsMessage2: "了玩家 "
+
+
+
+
+
+

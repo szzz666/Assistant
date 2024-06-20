@@ -11,14 +11,14 @@ public class AssistantConfig {
     public static HashMap<String, String> CommandConfig = new HashMap<>();
 
     public static int WebUiPort;
-    public static boolean xLink;
+    public static String Language;
 
     public static void loadConfig() {
         Config config = new Config(AssistantConfigPath + "/config.yml", Config.YAML);
         AssistantrConfig = (HashMap<String, String>) config.get("Assistant");
         CommandConfig = (HashMap<String, String>) config.get("Command");
         WebUiPort = config.getInt("WebUiPort");
-        xLink = config.getBoolean("xLink");
+        Language = config.getString("Language");
         config.save();
     }
 

@@ -5,12 +5,13 @@ import cn.nukkit.Player;
 
 import static top.szzz666.Assistant.AssistantMain.consoleObjects;
 import static top.szzz666.Assistant.AssistantMain.nkServer;
+import static top.szzz666.Assistant.config.LangConfig.*;
 
 public class DealWithPlayers {
 
     public static void warnPlayer(Player player, String substance) {
-        player.sendTitle("§c警告", substance, 20, 60, 20);
-        player.sendMessage("§c收到警告: " + substance);
+        player.sendTitle(warnPlayer_title, substance, 20, 60, 20);
+        player.sendMessage(warnPlayer_sendMessage + substance);
     }
 
     public static void banPlayer(Player player, String substance) {
@@ -38,10 +39,10 @@ public class DealWithPlayers {
     }
 
     public static void tipsMessage(Player AssistantPlayer, Player player, String processing) {
-        nkServer.broadcastMessage("§c协管 " + AssistantPlayer.getName() + " " + processing + "了玩家 " + player.getName());
+        nkServer.broadcastMessage(tipsMessage + AssistantPlayer.getName() + " " + processing + tipsMessage2 + player.getName());
     }
 
     public static void webTipsMessage(String AssistantPlayerName, Player player, String processing) {
-        nkServer.broadcastMessage("§c协管 " + AssistantPlayerName + " " + processing + "了玩家 " + player.getName());
+        nkServer.broadcastMessage(tipsMessage + AssistantPlayerName + " " + processing + tipsMessage2 + player.getName());
     }
 }

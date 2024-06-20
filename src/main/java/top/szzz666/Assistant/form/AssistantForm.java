@@ -9,22 +9,22 @@ import cn.nukkit.form.window.FormWindowCustom;
 import cn.nukkit.form.window.FormWindowSimple;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static top.szzz666.Assistant.AssistantMain.nkServer;
 import static top.szzz666.Assistant.config.AssistantConfig.WebUiPort;
 import static top.szzz666.Assistant.config.AssistantConfig.setAssistantPwd;
+import static top.szzz666.Assistant.config.LangConfig.*;
 import static top.szzz666.Assistant.dispose.DealWithPlayers.*;
 
 public class AssistantForm {
     public static void generalForm(Player AssistantPlayer) {
-        FormWindowSimple form = new FormWindowSimple("§e协管总菜单", "§b选择你要的功能");
+        FormWindowSimple form = new FormWindowSimple(generalForm_title, generalForm_content);
         // 添加按钮
-        form.addButton(new ElementButton("§b处理玩家"));
-        form.addButton(new ElementButton("§b解封玩家"));
-        form.addButton(new ElementButton("§b封禁离线玩家"));
+        form.addButton(new ElementButton(generalForm_ElementButton1));
+        form.addButton(new ElementButton(generalForm_ElementButton2));
+        form.addButton(new ElementButton(generalForm_ElementButton3));
         if (WebUiPort > 0) {
-            form.addButton(new ElementButton("§b设置WebUI登录密码"));
+            form.addButton(new ElementButton(generalForm_ElementButton4));
         }
         // 设置按钮点击处理
         form.addHandler(FormResponseHandler.withoutPlayer(ignored -> {
@@ -52,10 +52,10 @@ public class AssistantForm {
     }
 
     public static void banForm(Player AssistantPlayer) {
-        FormWindowCustom form = new FormWindowCustom("§e封禁离线玩家");
+        FormWindowCustom form = new FormWindowCustom(banForm_title);
         // 添加组件
-        form.addElement(new ElementInput("§b被封禁玩家名："));
-        form.addElement(new ElementInput("§b玩家被拦截进服看到的提示："));
+        form.addElement(new ElementInput(banForm_ElementInput1));
+        form.addElement(new ElementInput(banForm_ElementInput2));
         // 设置提交操作
         form.addHandler(FormResponseHandler.withoutPlayer(ignored -> {
             if (form.wasClosed()) return;
@@ -68,20 +68,20 @@ public class AssistantForm {
     }
 
     public static void SetWebUIpwdForm(Player player) {
-        FormWindowCustom form = new FormWindowCustom("设置WebUI登录密码");
+        FormWindowCustom form = new FormWindowCustom(SetWebUIpwdForm_title);
         // 添加组件
-        form.addElement(new ElementInput("", "输入要设置的密码"));
-        form.addElement(new ElementInput("", "再一次输入要设置的密码"));
+        form.addElement(new ElementInput("", SetWebUIpwdForm_ElementInput1));
+        form.addElement(new ElementInput("", SetWebUIpwdForm_ElementInput2));
         // 设置提交操作
         form.addHandler(FormResponseHandler.withoutPlayer(ignored -> {
             if (form.wasClosed()) return;
             String inputpassword = form.getResponse().getInputResponse(0); // 获取文本输入框的值
             String againpassword = form.getResponse().getInputResponse(1); // 获取下拉框选择的文本
             if (inputpassword.equals(againpassword)) {
-                player.sendMessage("成功设置密码为：" + inputpassword);
+                player.sendMessage(generalForm_sendMessage + inputpassword);
                 setAssistantPwd(player.getName(), inputpassword);
             } else {
-                player.sendMessage("§c两次密码不一致");
+                player.sendMessage(generalForm_sendMessage_error);
             }
             // 处理用户提交的数据
         }));
@@ -90,7 +90,7 @@ public class AssistantForm {
     }
 
     public static void openAssistantForm(Player AssistantPlayer) {
-        FormWindowCustom form = new FormWindowCustom("§e处理玩家菜单");
+        FormWindowCustom form = new FormWindowCustom(openAssistantForm_title);
         ArrayList<String> allPlayerNames = new ArrayList<>();
         ArrayList<Player> allPlayers = new ArrayList<>();
         for (Player serverPlayer : nkServer.getOnlinePlayers().values()) {
@@ -98,9 +98,9 @@ public class AssistantForm {
             allPlayers.add(serverPlayer);
         }
         // 添加组件
-        form.addElement(new ElementDropdown("§b选择被处理的玩家：", allPlayerNames));
-        form.addElement(new ElementDropdown("§b选择处理的方式：", Arrays.asList("警告", "杀死", "踢出", "封禁", "封禁IP")));
-        form.addElement(new ElementInput("§b处理玩家发送的消息提示："));
+        form.addElement(new ElementDropdown(openAssistantForm_ElementDropdown1, allPlayerNames));
+        form.addElement(new ElementDropdown(openAssistantForm_ElementDropdown2, openAssistantForm_Arrays));
+        form.addElement(new ElementInput(openAssistantForm_ElementInput1));
         // 设置提交操作
         form.addHandler(FormResponseHandler.withoutPlayer(ignored -> {
             if (form.wasClosed()) return;// 如果玩家关闭了表单，终止方法防止报错
@@ -123,7 +123,7 @@ public class AssistantForm {
                         banPlayer(playersBeingDealtWith, substance);
                         tipsMessage(AssistantPlayer, playersBeingDealtWith, processingText);
                     } else {
-                        AssistantPlayer.sendMessage("§c你不能封禁你自己");
+                        AssistantPlayer.sendMessage(openAssistantForm_sendMessage);
                     }
                     break;
                 case 4:
@@ -131,7 +131,7 @@ public class AssistantForm {
                         banPlayerIP(playersBeingDealtWith, substance);
                         tipsMessage(AssistantPlayer, playersBeingDealtWith, processingText);
                     } else {
-                        AssistantPlayer.sendMessage("§c你不能封禁你自己");
+                        AssistantPlayer.sendMessage(openAssistantForm_sendMessage);
                     }
                     break;
                 default:
@@ -145,9 +145,9 @@ public class AssistantForm {
 
 
     public static void UnbanForm(Player AssistantPlayer) {
-        FormWindowCustom form = new FormWindowCustom("§e解封玩家");
+        FormWindowCustom form = new FormWindowCustom(UnbanForm_title);
         // 添加组件
-        form.addElement(new ElementInput("§b被解封玩家名："));
+        form.addElement(new ElementInput(UnbanForm_ElementInput));
 
         // 设置提交操作
         form.addHandler(FormResponseHandler.withoutPlayer(ignored -> {
