@@ -18,7 +18,6 @@ public class OpenFormCmd extends Command {
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         if(sender.isOp() || AssistantrConfig.containsKey(sender.getName())) {
-            // 在这里编写你的命令逻辑
             if (args.length == 0) {
                 generalForm((Player) sender);
                 return true;

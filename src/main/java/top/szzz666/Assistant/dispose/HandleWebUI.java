@@ -5,6 +5,7 @@ import top.szzz666.Assistant.entity.WebPost;
 
 import static top.szzz666.Assistant.AssistantMain.nkServer;
 import static top.szzz666.Assistant.config.AssistantConfig.AssistantrConfig;
+import static top.szzz666.Assistant.config.AssistantConfig.DisableBanip;
 import static top.szzz666.Assistant.dispose.DealWithPlayers.*;
 import static top.szzz666.Assistant.dispose.DealWithPlayers.banPlayerIP;
 
@@ -29,9 +30,13 @@ public class HandleWebUI {
                         webTipsMessage(AssistantPlayerName, playersBeingDealtWith, "封禁");
                         return true;
                     case "4":
-                        banPlayerIP(playersBeingDealtWith, substance);
-                        webTipsMessage(AssistantPlayerName, playersBeingDealtWith, "封禁IP");
-                        return true;
+                        if (DisableBanip) {
+                            return false;
+                        }else {
+                            banPlayerIP(playersBeingDealtWith, substance);
+                            webTipsMessage(AssistantPlayerName, playersBeingDealtWith, "封禁IP");
+                            return true;
+                        }
                     default:
                         warnPlayer(playersBeingDealtWith, substance);
                         webTipsMessage(AssistantPlayerName, playersBeingDealtWith, "警告");

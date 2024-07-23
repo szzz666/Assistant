@@ -9,7 +9,6 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.util.Objects;
 
-
 import static top.szzz666.Assistant.AssistantMain.AssistantConfigPath;
 import static top.szzz666.Assistant.AssistantMain.plugin;
 import static top.szzz666.Assistant.config.AssistantConfig.AssistantrConfig;
@@ -85,18 +84,19 @@ public class MyHttpHandler implements HttpHandler {
             String Response = "403";
             Gson gson = new Gson();
             WebPost wp = gson.fromJson(body, WebPost.class);
-            if (wp == null || wp.getUsername().isEmpty() || wp.getPassword().isEmpty() || 
-                    wp.getPlayerName().isEmpty() || wp.getProcessing().isEmpty() || wp.getParameter().isEmpty())
-            {
+            if (wp == null || wp.getUsername().isEmpty() || wp.getPassword().isEmpty() ||
+                    wp.getPlayerName().isEmpty() || wp.getProcessing().isEmpty() || wp.getParameter().isEmpty()) {
                 Response = "{\"code\":\"401\"}";
-            }else if (!AssistantrConfig.containsKey(wp.getUsername())) {
+            } else if (!AssistantrConfig.containsKey(wp.getUsername())) {
                 Response = "{\"code\":\"402\"}";
-            }else if (!AssistantrConfig.get(wp.getUsername()).equals(wp.getPassword())){
+            } else if (!AssistantrConfig.get(wp.getUsername()).equals(wp.getPassword())) {
                 Response = "{\"code\":\"403\"}";
-            }else if (handleWebUI(wp)) {
+            } else if (handleWebUI(wp)) {
                 Response = "{\"code\":\"200\"}";
+            } else {
+                Response = "{\"code\":\"0\"}";
             }
-            
+
             // 设置响应头
             exchange.getResponseHeaders().set("Content-Type", "application/json");
             exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");

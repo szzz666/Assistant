@@ -22,6 +22,7 @@ public class LangConfig {
     public static String generalForm_ElementButton2;
     public static String generalForm_ElementButton3;
     public static String generalForm_ElementButton4;
+    public static String generalForm_ElementButton5;
     public static String banForm_title;
     public static String banForm_ElementInput1;
     public static String banForm_ElementInput2;
@@ -42,6 +43,8 @@ public class LangConfig {
     public static String warnPlayer_sendMessage;
     public static String tipsMessage;
     public static String tipsMessage2;
+    public static String disableBanip_tipsMessage;
+    public static String generalForm_sendMessage2;
 
 
     public static boolean loadLangConfig() {
@@ -60,6 +63,7 @@ public class LangConfig {
         generalForm_ElementButton2 = LangConfig.getString("generalForm_ElementButton2");
         generalForm_ElementButton3 = LangConfig.getString("generalForm_ElementButton3");
         generalForm_ElementButton4 = LangConfig.getString("generalForm_ElementButton4");
+        generalForm_ElementButton5 = LangConfig.getString("generalForm_ElementButton5");
         banForm_title = LangConfig.getString("banForm_title");
         banForm_ElementInput1 = LangConfig.getString("banForm_ElementInput1");
         banForm_ElementInput2 = LangConfig.getString("banForm_ElementInput2");
@@ -80,6 +84,8 @@ public class LangConfig {
         warnPlayer_sendMessage = LangConfig.getString("warnPlayer_sendMessage");
         tipsMessage = LangConfig.getString("tipsMessage");
         tipsMessage2 = LangConfig.getString("tipsMessage2");
+        disableBanip_tipsMessage = LangConfig.getString("disableBanip_tipsMessage");
+        generalForm_sendMessage2 = LangConfig.getString("generalForm_sendMessage2");
         LangConfig.save();
         return true;
     }

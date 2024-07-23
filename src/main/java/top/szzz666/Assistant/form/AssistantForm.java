@@ -11,9 +11,9 @@ import cn.nukkit.form.window.FormWindowSimple;
 import java.util.ArrayList;
 
 import static top.szzz666.Assistant.AssistantMain.nkServer;
-import static top.szzz666.Assistant.config.AssistantConfig.WebUiPort;
-import static top.szzz666.Assistant.config.AssistantConfig.setAssistantPwd;
+import static top.szzz666.Assistant.config.AssistantConfig.*;
 import static top.szzz666.Assistant.config.LangConfig.*;
+import static top.szzz666.Assistant.dispose.DealWithPlayers.tipsMessage;
 import static top.szzz666.Assistant.dispose.DealWithPlayers.*;
 
 public class AssistantForm {
@@ -25,6 +25,9 @@ public class AssistantForm {
         form.addButton(new ElementButton(generalForm_ElementButton3));
         if (WebUiPort > 0) {
             form.addButton(new ElementButton(generalForm_ElementButton4));
+        }
+        if (AssistantPlayer.isOp()) {
+            form.addButton(new ElementButton(generalForm_ElementButton5));
         }
         // 设置按钮点击处理
         form.addHandler(FormResponseHandler.withoutPlayer(ignored -> {
@@ -39,6 +42,11 @@ public class AssistantForm {
                     break;
                 case 3:
                     SetWebUIpwdForm(AssistantPlayer);
+                    break;
+                case 4:
+                    loadConfig();
+                    loadLangConfig();
+                    AssistantPlayer.sendMessage(generalForm_sendMessage2);
                     break;
                 default:
                     // 默认处理
@@ -127,11 +135,15 @@ public class AssistantForm {
                     }
                     break;
                 case 4:
-                    if (AssistantPlayer != playersBeingDealtWith) {
-                        banPlayerIP(playersBeingDealtWith, substance);
-                        tipsMessage(AssistantPlayer, playersBeingDealtWith, processingText);
+                    if (DisableBanip) {
+                        AssistantPlayer.sendMessage(disableBanip_tipsMessage);
                     } else {
-                        AssistantPlayer.sendMessage(openAssistantForm_sendMessage);
+                        if (AssistantPlayer != playersBeingDealtWith) {
+                            banPlayerIP(playersBeingDealtWith, substance);
+                            tipsMessage(AssistantPlayer, playersBeingDealtWith, processingText);
+                        } else {
+                            AssistantPlayer.sendMessage(openAssistantForm_sendMessage);
+                        }
                     }
                     break;
                 default:

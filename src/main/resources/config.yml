@@ -11,3 +11,4 @@ Command:
   delAssistant: del
 # WebUI端口号配置，为 -1 时不启用WebUI
 WebUiPort: 28668
+DisableBanip: true

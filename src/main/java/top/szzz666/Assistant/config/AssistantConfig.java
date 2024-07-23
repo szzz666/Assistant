@@ -12,6 +12,7 @@ public class AssistantConfig {
 
     public static int WebUiPort;
     public static String Language;
+    public static boolean DisableBanip;
 
     public static void loadConfig() {
         Config config = new Config(AssistantConfigPath + "/config.yml", Config.YAML);
@@ -19,6 +20,7 @@ public class AssistantConfig {
         CommandConfig = (HashMap<String, String>) config.get("Command");
         WebUiPort = config.getInt("WebUiPort");
         Language = config.getString("Language");
+        DisableBanip = config.getBoolean("DisableBanip");
         config.save();
     }
 

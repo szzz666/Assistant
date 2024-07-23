@@ -8,6 +8,7 @@ import static top.szzz666.Assistant.AssistantMain.nkServer;
 import static top.szzz666.Assistant.config.LangConfig.*;
 
 public class DealWithPlayers {
+    // 罚站
 
     public static void warnPlayer(Player player, String substance) {
         player.sendTitle(warnPlayer_title, substance, 20, 60, 20);
@@ -25,6 +26,7 @@ public class DealWithPlayers {
     public static void banPlayerIP(Player player, String substance) {
         nkServer.dispatchCommand(consoleObjects, "banip " + "\"" + player.getName() + "\" " + substance);
     }
+
     public static void banlxPlayer(String playerName, String substance) {
         nkServer.dispatchCommand(consoleObjects, "ban " + "\"" + playerName + "\" " + substance);
     }

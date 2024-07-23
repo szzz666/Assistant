@@ -46,7 +46,7 @@ public class AssistantMain extends PluginBase {
         this.getLogger().info(TextFormat.colorize('&',"&b Assistant插件开启"));
         this.getLogger().info(TextFormat.colorize('&',"&b Assistant插件 如果有bug加Q群反馈：894279534"));
         // 注册命令
-        this.getServer().getCommandMap().register("Assistant", new OpenFormCmd());
+        nkServer.getCommandMap().register("Assistant", new OpenFormCmd());
     }
 
     @Override
