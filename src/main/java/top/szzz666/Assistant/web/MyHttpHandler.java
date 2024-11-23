@@ -81,15 +81,16 @@ public class MyHttpHandler implements HttpHandler {
             String body = readInputStream(inputStream); // 自定义方法，用于读取输入流并转换为字符串
             String showbody = body.replaceAll("(\"Password\":\")([^\"]*)\"", "$1******\"");
             plugin.getLogger().info("POST请求的数据：" + showbody);
-            String Response = "403";
+            String Response;
             Gson gson = new Gson();
             WebPost wp = gson.fromJson(body, WebPost.class);
-            if (wp == null || wp.getUsername().isEmpty() || wp.getPassword().isEmpty() ||
-                    wp.getPlayerName().isEmpty() || wp.getProcessing().isEmpty() || wp.getParameter().isEmpty()) {
+            if (wp == null || wp.getPlayerName().isEmpty() ||
+                    wp.getProcessing().isEmpty() || wp.getParameter().isEmpty()) {
                 Response = "{\"code\":\"401\"}";
             } else if (!AssistantrConfig.containsKey(wp.getUsername())) {
                 Response = "{\"code\":\"402\"}";
-            } else if (!AssistantrConfig.get(wp.getUsername()).equals(wp.getPassword())) {
+            } else if (wp.getUsername().isEmpty() || wp.getPassword().isEmpty()
+                    || (!AssistantrConfig.get(wp.getUsername()).equals(wp.getPassword()))) {
                 Response = "{\"code\":\"403\"}";
             } else if (handleWebUI(wp)) {
                 Response = "{\"code\":\"200\"}";

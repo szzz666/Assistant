@@ -16,6 +16,7 @@ public class DealWithPlayers {
     }
 
     public static void banPlayer(Player player, String substance) {
+        substance = "\""+substance+"\"";
         nkServer.dispatchCommand(consoleObjects, "ban " + "\"" + player.getName() + "\" " + substance);
     }
 
@@ -24,10 +25,12 @@ public class DealWithPlayers {
     }
 
     public static void banPlayerIP(Player player, String substance) {
+        substance = "\""+substance+"\"";
         nkServer.dispatchCommand(consoleObjects, "banip " + "\"" + player.getName() + "\" " + substance);
     }
 
     public static void banlxPlayer(String playerName, String substance) {
+        substance = "\""+substance+"\"";
         nkServer.dispatchCommand(consoleObjects, "ban " + "\"" + playerName + "\" " + substance);
     }
 
@@ -36,6 +39,7 @@ public class DealWithPlayers {
     }
 
     public static void killPlayer(Player player, String substance) {
+        substance = "\""+substance+"\"";
         nkServer.dispatchCommand(consoleObjects, "kill " + "\"" + player.getName() + "\"");
         player.sendMessage(substance);
     }
