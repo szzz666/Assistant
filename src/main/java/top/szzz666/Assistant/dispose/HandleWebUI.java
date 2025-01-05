@@ -2,6 +2,7 @@ package top.szzz666.Assistant.dispose;
 
 import cn.nukkit.Player;
 import top.szzz666.Assistant.entity.WebPost;
+import top.szzz666.StarrySkyAuth.apis.SAuth;
 
 import static top.szzz666.Assistant.AssistantMain.nkServer;
 import static top.szzz666.Assistant.config.AssistantConfig.AssistantrConfig;
@@ -11,11 +12,19 @@ import static top.szzz666.Assistant.dispose.DealWithPlayers.banPlayerIP;
 
 public class HandleWebUI {
     public static boolean handleWebUI(WebPost wp) {
-        if (AssistantrConfig.get(wp.getUsername()).equals(wp.getPassword())) {
+        if (AssistantrConfig.containsKey(wp.getUsername()) && new SAuth().isAuthSuccess(wp.getUsername(), wp.getPassword())) {
             Player playersBeingDealtWith = getPlayerByName(wp.getPlayerName());
             String AssistantPlayerName = wp.getUsername();
             String substance = wp.getParameter();
-            if (playersBeingDealtWith != null ) {
+            int time = wp.getTime();
+            if (playersBeingDealtWith != null) {
+                if (wp.getProcessing().equals("unban")) {
+                    unBanPlayer(wp.getPlayerName());
+                    return true;
+                } else if (wp.getProcessing().equals("ban")) {
+                    banlxPlayer(wp.getPlayerName(), substance, time);
+                    return true;
+                }
                 switch (wp.getProcessing()) {
                     case "1":
                         killPlayer(playersBeingDealtWith, substance);
@@ -26,13 +35,13 @@ public class HandleWebUI {
                         webTipsMessage(AssistantPlayerName, playersBeingDealtWith, "踢出");
                         return true;
                     case "3":
-                        banPlayer(playersBeingDealtWith, substance);
+                        banPlayer(playersBeingDealtWith, substance, time);
                         webTipsMessage(AssistantPlayerName, playersBeingDealtWith, "封禁");
                         return true;
                     case "4":
                         if (DisableBanip) {
                             return false;
-                        }else {
+                        } else {
                             banPlayerIP(playersBeingDealtWith, substance);
                             webTipsMessage(AssistantPlayerName, playersBeingDealtWith, "封禁IP");
                             return true;
@@ -42,12 +51,6 @@ public class HandleWebUI {
                         webTipsMessage(AssistantPlayerName, playersBeingDealtWith, "警告");
                         return true;
                 }
-            }else if (wp.getProcessing().equals("unban")){
-                unBanPlayer(wp.getPlayerName());
-                return true;
-            }else if (wp.getProcessing().equals("ban")){
-                banlxPlayer(wp.getPlayerName(), substance);
-                return true;
             }
         }
         return false;

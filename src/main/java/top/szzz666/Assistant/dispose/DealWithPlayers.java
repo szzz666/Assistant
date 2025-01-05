@@ -5,7 +5,10 @@ import cn.nukkit.Player;
 
 import static top.szzz666.Assistant.AssistantMain.consoleObjects;
 import static top.szzz666.Assistant.AssistantMain.nkServer;
+import static top.szzz666.Assistant.config.BanedPlayer.ban;
+import static top.szzz666.Assistant.config.BanedPlayer.unban;
 import static top.szzz666.Assistant.config.LangConfig.*;
+import static top.szzz666.Assistant.tools.TimeUtils.nowTime;
 
 public class DealWithPlayers {
     // 罚站
@@ -15,22 +18,24 @@ public class DealWithPlayers {
         player.sendMessage(warnPlayer_sendMessage + substance);
     }
 
-    public static void banPlayer(Player player, String substance) {
-        substance = "\""+substance+"\"";
-        nkServer.dispatchCommand(consoleObjects, "ban " + "\"" + player.getName() + "\" " + substance);
+    public static void banPlayer(Player player, String substance, long time) {
+        substance = "\"" + substance + "\n" + ban(player.getName(), nowTime() + time * 60L)+"\"";
+        nkServer.dispatchCommand(consoleObjects, "ban " + "\"" + player.getName() + "\" "
+                + substance );
     }
 
     public static void unBanPlayer(String playerName) {
+        unban(playerName);
         nkServer.dispatchCommand(consoleObjects, "unban " + "\"" + playerName + "\" ");
     }
 
     public static void banPlayerIP(Player player, String substance) {
-        substance = "\""+substance+"\"";
+        substance = "\"" + substance + "\"";
         nkServer.dispatchCommand(consoleObjects, "banip " + "\"" + player.getName() + "\" " + substance);
     }
 
-    public static void banlxPlayer(String playerName, String substance) {
-        substance = "\""+substance+"\"";
+    public static void banlxPlayer(String playerName, String substance , long time) {
+        substance = "\"" + substance + "\n" + ban(playerName, nowTime() + time * 60L)+"\"";
         nkServer.dispatchCommand(consoleObjects, "ban " + "\"" + playerName + "\" " + substance);
     }
 
@@ -39,7 +44,7 @@ public class DealWithPlayers {
     }
 
     public static void killPlayer(Player player, String substance) {
-        substance = "\""+substance+"\"";
+        substance = "\"" + substance + "\"";
         nkServer.dispatchCommand(consoleObjects, "kill " + "\"" + player.getName() + "\"");
         player.sendMessage(substance);
     }

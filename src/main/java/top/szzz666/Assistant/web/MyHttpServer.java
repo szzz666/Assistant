@@ -6,10 +6,11 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 import static top.szzz666.Assistant.AssistantMain.plugin;
-import static top.szzz666.Assistant.config.AssistantConfig.WebUiPort;
 
 
+@Deprecated
 public class MyHttpServer {
+    public static int WebUiPort = 8000;
     public static void httpServer(){
         // 创建并绑定HTTP服务器到本地的8000端口，第二个参数表示连接队列长度，0表示使用默认值
         HttpServer server = null;

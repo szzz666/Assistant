@@ -4,3 +4,7 @@ version: "1.0.3"
 author: szzz666
 api: ["1.0.0"]
 description: Assistant plugin
+depend:
+  - WebAPI
+softdepend:
+  - StarrySkyAuth

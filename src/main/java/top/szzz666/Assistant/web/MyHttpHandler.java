@@ -16,7 +16,7 @@ import static top.szzz666.Assistant.dispose.HandleWebUI.handleWebUI;
 import static top.szzz666.Assistant.form.AssistantForm.getPlayerNameList;
 import static top.szzz666.Assistant.web.LoadHtmlFileAsString.loadHtmlFileAsString;
 
-
+@Deprecated
 public class MyHttpHandler implements HttpHandler {
     // 自定义方法：读取输入流为字符串
     private String readInputStream(InputStream inputStream) throws IOException {
@@ -46,7 +46,7 @@ public class MyHttpHandler implements HttpHandler {
             plugin.getLogger().info("获得请求参数：" + query);
             if (query == null) {
                 // 准备HTML响应
-                String response = loadHtmlFileAsString(AssistantConfigPath + "/webui.html");
+                String response = loadHtmlFileAsString(AssistantConfigPath + "/public/index.html");
 
                 // 设置响应头
                 exchange.getResponseHeaders().add("Content-Type", "text/html; charset=UTF-8");

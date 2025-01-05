@@ -8,7 +8,9 @@ import cn.nukkit.form.handler.FormResponseHandler;
 import cn.nukkit.form.window.FormWindowCustom;
 import cn.nukkit.form.window.FormWindowSimple;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static top.szzz666.Assistant.AssistantMain.nkServer;
 import static top.szzz666.Assistant.config.AssistantConfig.*;
@@ -23,7 +25,7 @@ public class AssistantForm {
         form.addButton(new ElementButton(generalForm_ElementButton1));
         form.addButton(new ElementButton(generalForm_ElementButton2));
         form.addButton(new ElementButton(generalForm_ElementButton3));
-        if (WebUiPort > 0) {
+        if (!useStarrySkyAuth) {
             form.addButton(new ElementButton(generalForm_ElementButton4));
         }
         if (AssistantPlayer.isOp()) {
@@ -69,7 +71,25 @@ public class AssistantForm {
             if (form.wasClosed()) return;
             String banPlayerName = form.getResponse().getInputResponse(0); // 获取文本输入框的值
             String substance = form.getResponse().getInputResponse(1);
-            banlxPlayer(banPlayerName, substance);
+            FormWindowCustom form1 = new FormWindowCustom("设置封禁时间");
+            String[] time = {"10分钟", "1小时", "1天", "一周", "一个月"};
+            int[] timeMinutes = {10, 60, 1440, 10080, 43200};
+            form1.addElement(new ElementDropdown("选择封禁时间（分钟）", Arrays.asList(time),0));
+            form1.addElement(new ElementInput("输入封禁时间（分钟）"));
+            form1.addHandler(FormResponseHandler.withoutPlayer(ignored1 -> {
+                if (form1.wasClosed()) return;
+                int timeIndex = form1.getResponse().getDropdownResponse(0).getElementID();
+                String timeMinuteStr = form1.getResponse().getInputResponse(1);
+                int tempTimeMinute = -1;
+                try {
+                    tempTimeMinute = Integer.parseInt(timeMinuteStr);
+                } catch (NumberFormatException e) {
+                    e.fillInStackTrace();
+                }
+                int timeMinute = tempTimeMinute > 0 ? tempTimeMinute : timeMinutes[timeIndex];
+                banlxPlayer(banPlayerName, substance, timeMinute);
+            }));
+            AssistantPlayer.showFormWindow(form1);
         }));
         // 显示表单给玩家
         AssistantPlayer.showFormWindow(form);
@@ -127,12 +147,30 @@ public class AssistantForm {
                     tipsMessage(AssistantPlayer, playersBeingDealtWith, processingText);
                     break;
                 case 3:
-                    if (AssistantPlayer != playersBeingDealtWith) {
-                        banPlayer(playersBeingDealtWith, substance);
-                        tipsMessage(AssistantPlayer, playersBeingDealtWith, processingText);
-                    } else {
-                        AssistantPlayer.sendMessage(openAssistantForm_sendMessage);
-                    }
+                    FormWindowCustom form1 = new FormWindowCustom("设置封禁时间");
+                    String[] time = {"10分钟", "1小时", "1天", "一周", "一个月"};
+                    int[] timeMinutes = {10, 60, 1440, 10080, 43200};
+                    form1.addElement(new ElementDropdown("选择封禁时间（分钟）", Arrays.asList(time),0));
+                    form1.addElement(new ElementInput("输入封禁时间（分钟）"));
+                    form1.addHandler(FormResponseHandler.withoutPlayer(ignored1 -> {
+                        if (form1.wasClosed()) return;
+                        int timeIndex = form1.getResponse().getDropdownResponse(0).getElementID();
+                        String timeMinuteStr = form1.getResponse().getInputResponse(1);
+                        int tempTimeMinute = -1;
+                        try {
+                           tempTimeMinute = Integer.parseInt(timeMinuteStr);
+                        } catch (NumberFormatException e) {
+                            e.fillInStackTrace();
+                        }
+                        int timeMinute = tempTimeMinute > 0 ? tempTimeMinute : timeMinutes[timeIndex];
+                        if (AssistantPlayer != playersBeingDealtWith) {
+                            banPlayer(playersBeingDealtWith, substance, timeMinute);
+                            tipsMessage(AssistantPlayer, playersBeingDealtWith, processingText);
+                        } else {
+                            AssistantPlayer.sendMessage(openAssistantForm_sendMessage);
+                        }
+                    }));
+                    AssistantPlayer.showFormWindow(form1);
                     break;
                 case 4:
                     if (DisableBanip) {
